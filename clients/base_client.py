@@ -67,6 +67,7 @@ class BaseApiClient:
                     time.sleep(sleep_time)
         # All retry attempt failed
         raise APIException(f"Request failed after {self.max_retries} attempt: {str(last_exception)}")
+
     def _handle_response(self, response: requests.Response, expected_status: Union[int, list] = None):
         if expected_status is not None:
             if isinstance(expected_status, int):
@@ -82,6 +83,14 @@ class BaseApiClient:
             )
 
         return response
+
+    def get(
+        self, endpoint: str, params: Dict = None, expected_status: int = 200
+    ) -> requests.Response:
+        url = self._build_url(endpoint)
+        response = self._make_request_with_retry("GET", url, params)
+        return self._handle_response(response, expected_status)
+
 
 def main():
     help(requests.Session().request)
