@@ -40,10 +40,10 @@ class BaseApiClient:
     def set_auth_header(self, token: str, authen_type: str='Bearer'):
         """ Set authentication header for all requests"""
         self.session.headers['Authorization'] = f'{authen_type} {token}'
-    
+
     def _build_url(self, endpoint: str) -> str:
         return urljoin(f'{self.base_url}/', endpoint.lstrip('/'))
-    
+
     def _make_request_with_retry(self, method: str, url: str, **kwargs) -> requests.Response:
         last_exception = None
         print(f"Making method {method} request to {url}")
@@ -60,13 +60,29 @@ class BaseApiClient:
             except requests.exceptions.RequestException as e:
                 last_exception = e
                 print(f"Request attempt {attempt + 1} failed: {str(e)}")
-                
+
                 if(attempt < self.max_retries):
                     sleep_time = 2 ** attempt
                     print(f"retry in {sleep_time} seconds")
                     time.sleep(sleep_time)
         # All retry attempt failed
-        
+        raise APIException(f"Request failed after {self.max_retries} attempt: {str(last_exception)}")
+    def _handle_response(self, response: requests.Response, expected_status: Union[int, list] = None):
+        if expected_status is not None:
+            if isinstance(expected_status, int):
+                expected_status = [expected_status]
+            if response.status_code not in expected_status:
+                raise APIException(f"Expected status {expected_status} not found, got {response.status_code}, response: {response.text}", response.status_code, response)
+
+        if response.status_code >= 400:
+            raise APIException(
+                f"HTTP Error {response.status_code}: {response.text}",
+                response.status_code, 
+                response
+            )
+
+        return response
+
 def main():
     help(requests.Session().request)
 
