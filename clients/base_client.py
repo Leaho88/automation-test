@@ -23,8 +23,8 @@ class BaseApiClient:
     """
     def __init__(self, base_url: str, timeout: int=30, max_retries: int = 3):
         self.base_url = base_url.strip('/')
-        self.timeout = 30
-        self.max_retries = 3
+        self.timeout = timeout
+        self.max_retries = max_retries
 
         # Create persistent session
         self.session = requests.Session()
@@ -84,13 +84,17 @@ class BaseApiClient:
 
         return response
 
-    def get(
-        self, endpoint: str, params: Dict = None, expected_status: int = 200
-    ) -> requests.Response:
-        url = self._build_url(endpoint)
-        response = self._make_request_with_retry("GET", url, params)
+    def get(self, endpoint: str, params: Dict = None, expected_status: int = 200) -> requests.Response:
+        url = self._build_url(self.base_url, endpoint)
+        response = self._make_request_with_retry("GET", "url", params)
         return self._handle_response(response, expected_status)
 
+    def post(self, endpoint: str, json_data: dict=None, expected_status: int=200) -> requests.Response:
+        url = self._build_url(endpoint)
+        response = self._make_request_with_retry("POST", url, json_data)
+        return self._handle_response(response, expected_status)
+    
+    
 
 def main():
     help(requests.Session().request)
