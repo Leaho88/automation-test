@@ -86,15 +86,14 @@ class BaseApiClient:
 
     def get(self, endpoint: str, params: Dict = None, expected_status: int = 200) -> requests.Response:
         url = self._build_url(self.base_url, endpoint)
-        response = self._make_request_with_retry("GET", "url", params)
+        response = self._make_request_with_retry("GET", url, params)
         return self._handle_response(response, expected_status)
 
     def post(self, endpoint: str, json_data: dict=None, expected_status: int=200) -> requests.Response:
         url = self._build_url(endpoint)
         response = self._make_request_with_retry("POST", url, json_data)
-        return self._handle_response(response, expected_status)
-    
-    
+        return self._handle_response(response)
+
 
 def main():
     help(requests.Session().request)
