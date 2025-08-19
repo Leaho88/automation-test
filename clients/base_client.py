@@ -103,6 +103,26 @@ class BaseApiClient:
         except:
             raise APIException("Response error", response.status_code, response)
 
+    def post_json(
+        self, endpoint: str, params: Dict = None, expected_status: int = 200
+    ) -> Dict:
+        response = self.post(endpoint, params, expected_status)
+        try:
+            return response.json()
+        except:
+            raise APIException("Response json error", response.status_code, response)
+
+    def close(self):
+        self.session.close()
+    
+    def __enter__(self):
+        return self
+    
+
+        
+
+
+
 
 def main():
     help(requests.Session().request)
