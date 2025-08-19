@@ -92,7 +92,16 @@ class BaseApiClient:
     def post(self, endpoint: str, json_data: dict=None, expected_status: int=200) -> requests.Response:
         url = self._build_url(endpoint)
         response = self._make_request_with_retry("POST", url, json_data)
-        return self._handle_response(response)
+        return self._handle_response(response, expected_status)
+
+    def get_json(
+        self, endpoint: str, params: Dict = None, expected_result: int = 200
+    ) -> Dict:
+        response = self.get(endpoint, params, expected_result)
+        try:
+            return response.json()
+        except:
+            raise APIException("Response error", response.status_code, response)
 
 
 def main():
