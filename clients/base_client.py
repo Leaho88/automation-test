@@ -91,7 +91,7 @@ class BaseApiClient:
 
     def post(self, endpoint: str, json_data: dict=None, expected_status: int=200) -> requests.Response:
         url = self._build_url(endpoint)
-        response = self._make_request_with_retry("POST", url, json_data)
+        response = self._make_request_with_retry("POST", url = url, json = json_data)
         return self._handle_response(response, expected_status)
 
     def get_json(
