@@ -1,0 +1,42 @@
+{
+    "dev": {
+        "base_url": "https://dev-jsonplaceholder.typicode.com",
+        "timeout": 60,
+        "retry_count": 5,
+        "auth_required": false,
+        "rate_limit_delay": 0.1,
+        "description": "Development environment with extended timeouts"
+    },
+    "test": {
+        "base_url": "https://jsonplaceholder.typicode.com",
+        "timeout": 30,
+        "retry_count": 3,
+        "auth_required": false,
+        "rate_limit_delay": 0,
+        "description": "Main test environment using JSONPlaceholder"
+    },
+    "staging": {
+        "base_url": "https://staging-api.example.com",
+        "timeout": 20,
+        "retry_count": 2,
+        "auth_required": true,
+        "rate_limit_delay": 0.05,
+        "description": "Staging environment (simulated)"
+    },
+    "prod": {
+        "base_url": "https://api.example.com",
+        "timeout": 10,
+        "retry_count": 1,
+        "auth_required": true,
+        "rate_limit_delay": 0.02,
+        "description": "Production environment (simulated)"
+    },
+    "httpbin": {
+        "base_url": "https://httpbin.org",
+        "timeout": 30,
+        "retry_count": 3,
+        "auth_required": false,
+        "rate_limit_delay": 0,
+        "description": "HTTPBin for advanced testing scenarios"
+    }
+}

@@ -113,18 +113,13 @@ class BaseApiClient:
             raise APIException("Response json error", response.status_code, response)
 
     def close(self):
-        self.session.close()
-    
+        self.session.close()  # Cleanup method that closes the session
+
     def __enter__(self):
-        return self
-    
+        return self  # Called when entering a with statement
+
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()
-    
-
-        
-
-
+        self.close()  # This does nothing - just references the method
 
 
 def main():
